@@ -1,10 +1,14 @@
 {
-  "name": "@renegade/react-boilerplate",
+  "name": "@adamdickinson/react-boilerplate",
   "version": "0.0.0",
   "description": "Boilerplate to kickstart a react project. Includes latest React, Webpack, TypeScript, Styled Components, and ESLint. Optionally includes Apollo Client, Material UI, React Router, Lodash and a heap of other handy little tools.",
-  "main": "index.js",
+  "main": "build/index.js",
   "author": "Adam Dickinson <adam@renegadedigital.com.au>",
   "license": "MIT",
+  "bin": {
+    "react-boilerplate": "./build/index.js"
+  },
+  "files": ["build/**/*"],
   "scripts": {
     "build": "babel src -d build",
     "start": "babel src -d build && node build"
@@ -13,8 +17,11 @@
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
+    "chalk": "^2.4.2",
+    "clear": "^0.1.0",
     "deepmerge": "^3.2.0",
     "inquirer": "^6.2.2",
     "prettier": "^1.16.4"
-  }
+  },
+  "repository": "git@github.com:adamdickinson/react-boilerplate.git"
 }

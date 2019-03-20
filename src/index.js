@@ -1,3 +1,7 @@
+#!/usr/bin/env node
+
+import chalk from "chalk"
+import clear from "clear"
 import deepmerge from "deepmerge"
 import inquirer from "inquirer"
 
@@ -11,6 +15,14 @@ import { getChoices, getCorePackages } from "./packages"
 import { getConfigurers } from "./configurers"
 
 async function run() {
+  const log = (message, depth=0) => {
+    const leader = depth ? chalk.bold.blue("   > ") : chalk.bold.green(":: ")
+    console.log(leader + message)
+  }
+
+  clear()
+  console.log(chalk.bold("Renegade React Boilerplate") + "\n")
+
   const { packages: optionalPackages } = await inquirer.prompt([
     {
       type: "checkbox",
@@ -47,19 +59,17 @@ async function run() {
 
   let result
 
-  console.log(":: Adding dependencies...")
+  log("Adding dependencies...")
   result = spawnSync("yarn", ["add", ...settings.dependencies])
   if( result.error ) throw result.error
-  console.log(":: Dependencies added")
 
 
-  console.log(":: Adding dev dependencies...")
+  log("Adding dev dependencies...")
   result = spawnSync("yarn", ["add", "--dev", ...settings.devDependencies])
   if( result.error ) throw result.error
-  console.log(":: Dev dependencies added")
 
 
-  console.log(":: Populating configs...")
+  log("Populating configs...")
   const configurers = getConfigurers()
   const configsToUpdate = intersection(
     Object.keys(settings.configs),
@@ -68,20 +78,19 @@ async function run() {
 
   configsToUpdate.forEach(config => {
     const configurer = configurers[config]
-    console.log(`   > ${configurer.filename}`)
+    log(configurer.filename, 2)
     configurer.update(settings.configs[config])
   })
 
-  console.log(":: Building out starting points")
+  log("Building out starting points")
   if( !fs.existsSync("src/") ) {
-    console.log("   > src/")
+    log("src/", 2)
     fs.mkdirSync("src")
   }
 
-  console.log(packageNames)
   const extension = packageNames.includes("Typescript") ? ".tsx" : ".js"
   if( !fs.existsSync(`src/index${extension}`) )
-    console.log(`   > src/index${extension}`)
+    log(`src/index${extension}`, 2)
     fs.writeFileSync(`src/index${extension}`, [
       `import * as React from "react"`,
       `import * as ReactDOM from "react-dom"`,
@@ -91,11 +100,7 @@ async function run() {
       `ReactDOM.render(<App />, document.getElementById("app"))`
     ].join("\n"))
 
-
-
-
-  console.log("Done!")
-
+  log("Done!")
 }
 
 
