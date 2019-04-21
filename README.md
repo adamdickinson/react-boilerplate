@@ -8,7 +8,7 @@ Installation
 ---
 
 ```
-yarn add global @adamdickinson/react-boilerplate
+yarn global add @adamdickinson/react-boilerplate
 react-boilerplate
 ```
 
